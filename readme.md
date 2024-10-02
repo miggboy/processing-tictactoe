@@ -1,11 +1,11 @@
 # Tic-Tac-Toe!
 
-This is a simple tic-tac-toe game made with Processing.
-This program is for CS3035.
+This is a simple tic-tac-toe game made with Processing. <br>
+This program is for CS3035. <br>
 
-Group:
-Nam Nhat Do
-Miguel Gould
-Avery Gallant
-Thomas Mack
-Nick Smith
+Group: <br>
+Nam Nhat Do <br>
+Miguel Gould <br>
+Avery Gallant<br>
+Thomas Mack <br>
+Nick Smith<br>
