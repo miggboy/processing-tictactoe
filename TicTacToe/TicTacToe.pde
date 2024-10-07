@@ -33,12 +33,21 @@ int[][][][] winRows = {{{{1, 0, 2, 0}, {1, 1, 2, 2}, {0, 1, 0, 2}},             
 //used for board layout in console
 String line = "\n-------\n";
 
+//Screen Size
+int height = 900;
+int width = 3*height/4;
+
 //Default Colors
 color xColor = color(255,100,0);
 color oColor = color(184, 37, 162);
 color lineColor = color(255);
 color drawColor = color(212, 40, 98);
 color winColor = color(24, 214, 144);
+
+//Font Sizes
+int smallFont = int(width/12);
+int mediumFont = int(width/9.375);
+int largeFont = int(width/4.6875);
 
 //possible symbols to be added to board
 char[] players = {'x', 'o'};
@@ -55,6 +64,11 @@ int turn;
 String message = "x's turn";
 color messageColour = color(xColor);
 
+//Apply screen size settings at startup
+void settings(){
+  size(width,height);
+}
+
 void setup() {
   turn = 1;
   //start game on x's turn
@@ -62,9 +76,7 @@ void setup() {
   printBoard();
   print(players[player] + "'s turn\n");
   
-  
-  size(300, 400);
-  textSize(32);
+  textSize(mediumFont);
   textAlign(CENTER, CENTER);
   
 }
@@ -80,25 +92,28 @@ void draw(){
 
 //Function draws a grid
 void drawGrid(){
-  line(100, 0, 100, 300);
-  line(200, 0, 200, 300);
-  line(0, 100, 300, 100);
-  line(0, 200, 300, 200);
-  line(0, 300, 300, 300);
+  noFill();
+  rect(0, 0, width-1, 3 * height/4);
+  line(width/3, 0, width/3, 3*height/4);
+  line(2*width/3 ,0 ,2*width/3 ,3*height/4);
+  line(0 ,height/4 ,width ,height/4);
+  line(0 ,height/2 ,width ,height/2);
+  line(0 ,3*height/4 ,width ,3*height/4);
   stroke(lineColor);
+  
 }
 
 //Function draws symbols if they exist
 void drawSymbols() {
-  textSize(64);
+  textSize(largeFont);
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
       if (board[i][j] == 'x') {
         fill(xColor); //X's are blue
-        text("X", j * 100 + 50, i * 100 + 50);
+        text("X", j * (width/3) + (width/6), i * (width/3) + (width/6));
       } else if (board[i][j] == 'o') {
         fill(oColor); //O's are red
-        text("O", j * 100 + 50, i * 100 + 50);
+        text("O", j * (width/3) + (width/6), i * (width/3) + (width/6));
       }
     }
   }
@@ -106,9 +121,9 @@ void drawSymbols() {
 
 //Function draws the bottom label
 void drawLabel(){
-  textSize(25);
+  textSize(smallFont);
   fill(messageColour);
-  text(message, width/2, height - 25);
+  text(message, width/2, 7*height/8);
 }
 
 
@@ -153,11 +168,11 @@ void keyPressed() {
 
 //Clicking on board sets symbol in corresponding box
 void mousePressed() {
-  if (mouseY < 300) {
-    int col = mouseX / 100;
-    int row = mouseY / 100;
+  if (mouseY < (3*height/4)) {
+    int col = mouseX / (width / 3);
+    int row = mouseY / (height / 4);
     
-    if (board[row][col] == ' ') {
+    if (board[row][col] == ' ') { //<>//
       placeSymbol(row, col);
     }
   }
@@ -172,15 +187,15 @@ void placeSymbol(int x, int y) {
    printBoard();
    turn++;
   
-  if(checkWin(x, y, players[player])) { //<>// //<>//
+  if(checkWin(x, y, players[player])) {
     gameOver = true;
-    textSize(25);
+    textSize(smallFont);
     messageColour = color(winColor);
     message = players[player] + " win! press 'r'\nto reset or 'e' to exit";
     print(players[player] + " win! press 'r' to reset or 'e' to exit\n");
   }
   else if(turn > 9) {
-    textSize(25);
+    textSize(smallFont);
     messageColour = color(drawColor);
     message = "draw. press 'r'\nto reset or 'e' to exit";
     print("draw. press 'r' to reset or 'e' to exit\n");
@@ -238,7 +253,7 @@ void resetBoard() {
     messageColour = color(oColor);
   }
   
-  textSize(32);
+  textSize(mediumFont);
   message = players[player] + "'s turn";
   print(players[player] + "'s turn");
 }
