@@ -33,17 +33,27 @@ int[][][][] winRows = {{{{1, 0, 1, 1}, {1, 1, 2, 2}, {0, 1, 0, 2}},             
 //used for board layout in console
 String line = "\n-------\n";
 
+//Default Colors
+color xColor = color(255,100,0);
+color oColor = color(184, 37, 162);
+color lineColor = color(255);
+color drawColor = color(212, 40, 98);
+color winColor = color(24, 214, 144);
+
 //possible symbols to be added to board
 char[] players = {'x', 'o'};
 //index of players array, represents whose turn it is
 int player;
+
+// Checks if game is over
+boolean gameOver = false;
 
 //represents what number turn it is. when >8, game is a draw
 int turn;
 
 //message for label
 String message = "x's turn";
-color messageColour = color(0, 0, 255);
+color messageColour = color(xColor);
 
 void setup() {
   turn = 1;
@@ -60,7 +70,7 @@ void setup() {
 }
 
 void draw(){
-  background(255);
+  background(0);
   
   //Call draw functions
   drawGrid();
@@ -75,6 +85,7 @@ void drawGrid(){
   line(0, 100, 300, 100);
   line(0, 200, 300, 200);
   line(0, 300, 300, 300);
+  stroke(lineColor);
 }
 
 //Function draws symbols if they exist
@@ -83,10 +94,10 @@ void drawSymbols() {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
       if (board[i][j] == 'x') {
-        fill(0, 0, 255); //X's are blue
+        fill(xColor); //X's are blue
         text("X", j * 100 + 50, i * 100 + 50);
       } else if (board[i][j] == 'o') {
-        fill(255, 0, 0); //O's are red
+        fill(oColor); //O's are red
         text("O", j * 100 + 50, i * 100 + 50);
       }
     }
@@ -103,6 +114,7 @@ void drawLabel(){
 
 void keyPressed() {
   switch(key) {
+    
     case '1':
       if(board[0][0] == ' ') placeSymbol(0, 0);
       break;
@@ -152,30 +164,34 @@ void mousePressed() {
 }
 
 void placeSymbol(int x, int y) {
-  board[x][y] = players[player];
-  printBoard();
-  turn++;
   
+  //If game is over don't allow symbol to be placed
+  if(gameOver){return;}
   
-  if(turn > 9) {
+   board[x][y] = players[player];
+   printBoard();
+   turn++;
+  
+  if(checkWin(x, y, players[player])) { //<>//
+    gameOver = true;
     textSize(25);
-    messageColour = color(255, 0, 0);
-    message = "draw. press 'r'\nto reset or 'e' to exit";
-    print("draw. press 'r' to reset or 'e' to exit\n");
-  }
-  else if(checkWin(x, y, players[player])) {
-    textSize(25);
-    messageColour = color(0, 255, 0);
+    messageColour = color(winColor);
     message = players[player] + " win! press 'r'\nto reset or 'e' to exit";
     print(players[player] + " win! press 'r' to reset or 'e' to exit\n");
+  }
+  else if(turn > 9) {
+    textSize(25);
+    messageColour = color(drawColor);
+    message = "draw. press 'r'\nto reset or 'e' to exit";
+    print("draw. press 'r' to reset or 'e' to exit\n");
   }
   else {
     player = (player+1)%players.length;
     message = players[player] + "'s turn";
     if(players[player] == 'x'){
-      messageColour = color(0, 0, 255);
+      messageColour = xColor;
     } else {
-      messageColour = color(255, 0, 0);
+      messageColour = oColor;
     }
     
     print(players[player] + "'s turn\n");
@@ -213,12 +229,13 @@ void resetBoard() {
   }
   turn = 1;
   player = 0;
+  gameOver = false;
   printBoard();
   
   if(players[player] == 'x'){
-    messageColour = color(0, 0, 255);
+    messageColour = color(xColor);
   } else {
-    messageColour = color(255, 0, 0);
+    messageColour = color(oColor);
   }
   
   textSize(32);
