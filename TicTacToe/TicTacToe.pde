@@ -20,7 +20,7 @@ char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
    {0, 0, 0, 2} and {1, 1, 2, 1}
 */
 //There's probably a more efficient way to store this but idc
-int[][][][] winRows = {{{{1, 0, 1, 1}, {1, 1, 2, 2}, {0, 1, 0, 2}},             //winning rows for board[0][0]
+int[][][][] winRows = {{{{1, 0, 2, 0}, {1, 1, 2, 2}, {0, 1, 0, 2}},             //winning rows for board[0][0]
                       {{0, 0, 0, 2}, {1, 1, 2, 1}},                             //winning rows for board[0][1]
                       {{1, 2, 2, 2}, {1, 1, 2, 0}, {0, 1, 0, 0}}},              //winning rows for board[0][2]
                       {{{0, 0, 2, 0}, {1, 1, 1, 2}},                            //winning rows for board[1][0]
@@ -172,7 +172,7 @@ void placeSymbol(int x, int y) {
    printBoard();
    turn++;
   
-  if(checkWin(x, y, players[player])) { //<>//
+  if(checkWin(x, y, players[player])) { //<>// //<>//
     gameOver = true;
     textSize(25);
     messageColour = color(winColor);
